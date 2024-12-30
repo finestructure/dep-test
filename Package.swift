@@ -20,6 +20,7 @@ let package = Package(
         // Targets can depend on other targets in this package and products from dependencies.
         .target(name: "dep-test", dependencies: [
             .product(name: "Dependencies", package: "swift-dependencies"),
+            .product(name: "DependenciesMacros", package: "swift-dependencies"),
         ]),
         .testTarget(
             name: "dep-testTests",
