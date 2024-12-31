@@ -12,7 +12,6 @@ enum CallSite {
 
 @DependencyClient
 struct GithubClient2 {
-    var fetchLicense: @Sendable (_ owner: String, _ repository: String) async -> Github2.License?
     var fetchMetadata: @Sendable (_ owner: String, _ repository: String) async throws(Github2.Error) -> Github2.Metadata = { _, _ in XCTFail("fetchMetadata"); return .init() }
 }
 
@@ -20,7 +19,6 @@ struct GithubClient2 {
 extension GithubClient2: DependencyKey {
     static var liveValue: Self {
         .init(
-            fetchLicense: { owner, repo in .init() },
             fetchMetadata: { _, _ in .init() }
         )
     }
@@ -29,7 +27,6 @@ extension GithubClient2: DependencyKey {
 
 enum Github2 {
     struct Metadata { }
-    struct License { }
     enum Error: Swift.Error { }
 }
 
