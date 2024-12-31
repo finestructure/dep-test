@@ -2,23 +2,35 @@ import Dependencies
 import DependenciesMacros
 
 
-enum Github {
-    struct Metadata { }
-    enum Error: Swift.Error { }
+enum CallSite {
+    func f() async throws {
+        @Dependency(\.github) var github
+        _ = try await github.fetchMetadata(owner: "foo", repository: "bar")
+    }
 }
+
 
 @DependencyClient
 struct GithubClient {
-    var fetchMetadata: @Sendable (_ owner: String, _ repository: String) async throws(Github.Error) -> Github.Metadata
+    var fetchLicense: @Sendable (_ owner: String, _ repository: String) async -> Github.License?
+    var fetchMetadata: @Sendable (_ owner: String, _ repository: String) async throws(Github.Error) -> Github.Metadata = { _, _ in XCTFail("fetchMetadata"); return .init() }
 }
 
 
 extension GithubClient: DependencyKey {
     static var liveValue: Self {
         .init(
-            fetchMetadata: { owner, repo throws(Github.Error) in try await Github.fetchMetadata(owner: owner, repository: repo) }
+            fetchLicense: { owner, repo in .init() },
+            fetchMetadata: { _, _ in .init() }
         )
     }
+}
+
+
+enum Github {
+    struct Metadata { }
+    struct License { }
+    enum Error: Swift.Error { }
 }
 
 
