@@ -2,14 +2,6 @@ import Dependencies
 import DependenciesMacros
 
 
-enum CallSite {
-    func f() async throws {
-        @Dependency(\.github2) var github
-        _ = try await github.fetchMetadata(owner: "foo", repository: "bar")
-    }
-}
-
-
 @DependencyClient
 struct GithubClient2 {
     var fetchMetadata: @Sendable (_ owner: String, _ repository: String) async throws(Github2.Error) -> Github2.Metadata = { _, _ in XCTFail("fetchMetadata"); return .init() }
