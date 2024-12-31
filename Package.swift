@@ -26,5 +26,6 @@ let package = Package(
             name: "dep-testTests",
             dependencies: ["dep-test"]
         ),
-    ]
+    ],
+    swiftLanguageModes: [.v6]
 )
